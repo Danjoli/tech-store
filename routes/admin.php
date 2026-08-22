@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,4 +14,5 @@ Route::middleware(['auth', 'verified', 'admin'])
         })->name('dashboard');
 
         Route::resource('brands', BrandController::class);
+        Route::resource('categories', CategoryController::class);
     });

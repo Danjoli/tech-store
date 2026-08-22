@@ -73,6 +73,15 @@ defineProps<{
             </p>
         </div>
 
+        <div class="mb-6 flex justify-end">
+            <Link
+                :href="`/admin/products/${product.id}/variants`"
+                class="rounded-lg border border-blue-300 px-5 py-3 text-sm font-bold text-blue-700 hover:bg-blue-50"
+            >
+                Gerenciar variantes
+            </Link>
+        </div>
+
         <ProductForm
             :product="product"
             :brands="brands"

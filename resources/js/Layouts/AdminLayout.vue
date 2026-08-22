@@ -65,11 +65,18 @@ function isActive(url: string): boolean {
                         Produtos
                     </span>
 
-                    <span
-                        class="block cursor-not-allowed rounded-lg px-4 py-3 text-sm text-slate-500"
+                    <Link
+                        href="/admin/categories"
+                        class="block rounded-lg px-4 py-3 text-sm font-semibold transition"
+                        :class="
+                            isCurrentSection('/admin/categories')
+                                ? 'bg-blue-600 text-white'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        "
+                        @click="menuOpen = false"
                     >
                         Categorias
-                    </span>
+                    </Link>
 
                     <Link
                         href="/admin/brands"
@@ -133,7 +140,7 @@ function isActive(url: string): boolean {
                 >
                     {{ flash.error }}
                 </div>
-                
+
                 <slot />
             </main>
         </div>

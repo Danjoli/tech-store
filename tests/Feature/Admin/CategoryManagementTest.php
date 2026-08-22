@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\Category;
 use App\Models\User;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -69,9 +70,10 @@ class CategoryManagementTest extends TestCase
         $this->assertSame('hardware', $category->slug);
         $this->assertNotNull($category->image_path);
 
-        Storage::disk('public')->assertExists(
-            $category->image_path,
-        );
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk('public');
+
+        $disk->assertExists($category->image_path,);
     }
 
     public function test_admin_can_create_subcategory(): void

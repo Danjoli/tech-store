@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,4 +16,5 @@ Route::middleware(['auth', 'verified', 'admin'])
 
         Route::resource('brands', BrandController::class);
         Route::resource('categories', CategoryController::class);
+        Route::resource('products', ProductController::class);
     });

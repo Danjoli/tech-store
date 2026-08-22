@@ -59,11 +59,18 @@ function isActive(url: string): boolean {
                         Catálogo
                     </p>
 
-                    <span
-                        class="block cursor-not-allowed rounded-lg px-4 py-3 text-sm text-slate-500"
+                    <Link
+                        href="/admin/products"
+                        class="block rounded-lg px-4 py-3 text-sm font-semibold transition"
+                        :class="
+                            isCurrentSection('/admin/products')
+                                ? 'bg-blue-600 text-white'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        "
+                        @click="menuOpen = false"
                     >
                         Produtos
-                    </span>
+                    </Link>
 
                     <Link
                         href="/admin/categories"

@@ -7,6 +7,19 @@ const menuOpen = ref(false);
 
 const currentUrl = computed(() => page.url);
 
+type FlashMessages = {
+    success?: string | null;
+    error?: string | null;
+};
+
+const flash = computed(
+    () => page.props.flash as FlashMessages | undefined,
+);
+
+function isCurrentSection(url: string): boolean {
+    return currentUrl.value.startsWith(url);
+}
+
 function isActive(url: string): boolean {
     return currentUrl.value === url;
 }
@@ -58,11 +71,18 @@ function isActive(url: string): boolean {
                         Categorias
                     </span>
 
-                    <span
-                        class="block cursor-not-allowed rounded-lg px-4 py-3 text-sm text-slate-500"
+                    <Link
+                        href="/admin/brands"
+                        class="block rounded-lg px-4 py-3 text-sm font-semibold transition"
+                        :class="
+                            isCurrentSection('/admin/brands')
+                                ? 'bg-blue-600 text-white'
+                                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                        "
+                        @click="menuOpen = false"
                     >
                         Marcas
-                    </span>
+                    </Link>
                 </div>
             </nav>
         </aside>
@@ -100,6 +120,20 @@ function isActive(url: string): boolean {
             </header>
 
             <main class="p-5 lg:p-8">
+                <div
+                    v-if="flash?.success"
+                    class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-700"
+                >
+                    {{ flash.success }}
+                </div>
+
+                <div
+                    v-if="flash?.error"
+                    class="mb-6 rounded-lg border border-red-200 bg-red-50 px-5 py-4 text-sm font-semibold text-red-700"
+                >
+                    {{ flash.error }}
+                </div>
+                
                 <slot />
             </main>
         </div>

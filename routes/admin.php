@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\ProductVariantController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -39,6 +40,23 @@ Route::middleware(['auth', 'verified', 'admin'])
                     ->name('update');
 
                 Route::delete('/{variant}', [ProductVariantController::class, 'destroy'])
+                    ->name('destroy');
+            });
+
+        Route::prefix('products/{product}/images')
+            ->name('products.images.')
+            ->scopeBindings()
+            ->group(function (): void {
+                Route::get('/', [ProductImageController::class, 'index'])
+                    ->name('index');
+
+                Route::post('/', [ProductImageController::class, 'store'])
+                    ->name('store');
+
+                Route::put('/{image}', [ProductImageController::class, 'update'])
+                    ->name('update');
+
+                Route::delete('/{image}', [ProductImageController::class, 'destroy'])
                     ->name('destroy');
             });
     });

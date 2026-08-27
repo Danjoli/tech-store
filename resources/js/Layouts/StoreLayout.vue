@@ -17,6 +17,7 @@ interface SharedPageProps extends PageProps {
         error?: string;
     };
     wishlistCount?: number;
+    cartCount?: number;
     filters?: {
         search?: string;
     };
@@ -28,6 +29,7 @@ const search = ref(page.props.filters?.search ?? '');
 
 const user = computed(() => page.props.auth?.user ?? null);
 const wishlistCount = computed(() => page.props.wishlistCount ?? 0);
+const cartCount = computed(() => page.props.cartCount ?? 0);
 
 const successMessage = computed(
     () => page.props.flash?.success ?? null,
@@ -190,6 +192,15 @@ function submitSearch(): void {
                             <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z" />
                         </svg>
                         <b v-if="wishlistCount > 0" class="absolute -right-[5px] -top-[5px] grid h-[17px] min-w-[17px] place-items-center rounded-[9px] bg-[#8d6cff] px-1 text-[10px] text-white">{{ wishlistCount }}</b>
+                    </Link>
+
+                    <Link href="/carrinho" class="relative grid h-10 w-10 place-items-center rounded-[10px] border border-[#222936] bg-[#11151c] text-[#c7cfdb] transition-colors duration-150 hover:border-[#4a80bd] hover:text-white" :aria-label="`${cartCount} itens no carrinho`">
+                        <svg class="h-[22px] w-[22px]" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3h2l2.4 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L21 7H6" />
+                            <circle cx="10" cy="20" r="1" />
+                            <circle cx="18" cy="20" r="1" />
+                        </svg>
+                        <b v-if="cartCount > 0" class="absolute -right-[5px] -top-[5px] grid h-[17px] min-w-[17px] place-items-center rounded-[9px] bg-[#5e9eff] px-1 text-[10px] text-[#07101b]">{{ cartCount }}</b>
                     </Link>
 
                 </div>

@@ -35,4 +35,4 @@ Os testes usam SQLite em memória automaticamente; a aplicação pode continuar 
 
 ## Escopo atual
 
-O catálogo e sua administração estão prontos para operação. Carrinho, checkout, pagamentos, pedidos e integrações de entrega não foram criados porque exigem decisões comerciais e integrações específicas; não há botões ou rotas quebradas simulando esses recursos.
+O catálogo, os favoritos, o perfil e o carrinho estão prontos para operação. Checkout, pagamentos, pedidos e integrações de entrega continuam fora do escopo até que as regras comerciais e os provedores sejam definidos.

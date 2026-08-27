@@ -20,6 +20,10 @@ Usuários autenticados podem salvar ou remover produtos pelos corações da vitr
 
 Em `/perfil`, o cliente pode atualizar nome, e-mail e telefone, trocar a senha e acessar os favoritos. Alterações de e-mail invalidam a confirmação anterior e disparam uma nova verificação, conforme o fluxo do Laravel Fortify.
 
+## Carrinho
+
+O carrinho é persistido por usuário nas tabelas `carts` e `cart_items`. Na página do produto o cliente escolhe uma variação e quantidade; o servidor valida produto ativo, variação ativa e saldo disponível. A tela `/carrinho` permite atualizar ou remover itens e exibe o total. Checkout e pagamento ainda não estão habilitados.
+
 ## Estoque
 
 O saldo disponível é `stock - reserved_stock`. O dashboard lista variações ativas cujo estoque total é igual ou menor que `low_stock_threshold`.

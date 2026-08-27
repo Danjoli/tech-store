@@ -12,6 +12,7 @@ A Tech Store usa Laravel 12 no back-end e Inertia + Vue 3 no front-end. A mesma 
 - `app/Services/Store/ProductCardPresenter`: centraliza o contrato de dados dos cards públicos.
 - `app/Services/Admin/DashboardMetricsService`: concentra as métricas exibidas no dashboard.
 - `app/Http/Controllers/Store/FavoriteController`: mantém os favoritos por usuário autenticado.
+- `app/Http/Controllers/Store/ProfileController`: entrega a conta do cliente e delega a alteração de e-mail ao fluxo seguro do Fortify.
 - `app/Enums`: representa estados fechados, como `ProductStatus` e `UserRole`, com rótulos em português.
 - `app/Models`: relacionamentos e regras pequenas, como preço atual e estoque disponível da variação.
 

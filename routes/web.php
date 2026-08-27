@@ -3,6 +3,7 @@
 use App\Http\Controllers\Store\FavoriteController;
 use App\Http\Controllers\Store\HomeController;
 use App\Http\Controllers\Store\ProductController;
+use App\Http\Controllers\Store\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('store.')->group(function (): void {
@@ -21,6 +22,11 @@ Route::middleware('auth')->name('store.favorites.')->group(function (): void {
         ->name('index');
     Route::post('/favoritos/{product:slug}/alternar', [FavoriteController::class, 'toggle'])
         ->name('toggle');
+});
+
+Route::middleware('auth')->name('store.profile.')->group(function (): void {
+    Route::get('/perfil', [ProfileController::class, 'show'])->name('show');
+    Route::put('/perfil', [ProfileController::class, 'update'])->name('update');
 });
 
 require __DIR__.'/admin.php';

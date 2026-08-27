@@ -162,7 +162,7 @@ function submitSearch(): void {
                             " />
                     </form>
 
-                    <Link :href="user ? '/dashboard' : '/login'" class="
+                    <Link :href="user ? '/perfil' : '/login'" class="
                             relative grid h-10 w-10
                             place-items-center rounded-[10px]
                             border border-[#222936]

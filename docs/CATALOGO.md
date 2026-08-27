@@ -16,6 +16,10 @@ O painel permite criar, editar e apagar marcas, categorias e produtos. Depois de
 
 Usuários autenticados podem salvar ou remover produtos pelos corações da vitrine e da tela de detalhes. Os itens ficam na página `/favoritos` e são vinculados ao usuário na tabela `product_favorites`; não se confundem com carrinho ou pedido.
 
+## Perfil
+
+Em `/perfil`, o cliente pode atualizar nome, e-mail e telefone, trocar a senha e acessar os favoritos. Alterações de e-mail invalidam a confirmação anterior e disparam uma nova verificação, conforme o fluxo do Laravel Fortify.
+
 ## Estoque
 
 O saldo disponível é `stock - reserved_stock`. O dashboard lista variações ativas cujo estoque total é igual ou menor que `low_stock_threshold`.

@@ -62,6 +62,7 @@ const props = defineProps<{
 
 const selectedVariantId = ref(props.product.default_variant_id);
 const selectedImageId = ref<number | null>(null);
+const quantity = ref(1);
 
 const selectedVariant = computed(
     () =>
@@ -139,6 +140,8 @@ const availableStock = computed(
     () => selectedVariant.value?.available_stock ?? 0,
 );
 
+const maximumQuantity = computed(() => Math.min(10, availableStock.value));
+
 
 function formatCurrency(value: number): string {
     return new Intl.NumberFormat('pt-BR', {
@@ -157,11 +160,29 @@ function toggleFavorite(): void {
     });
 }
 
+function decreaseQuantity(): void {
+    if (quantity.value > 1) quantity.value--;
+}
+
+function increaseQuantity(): void {
+    if (quantity.value < maximumQuantity.value) quantity.value++;
+}
+
+function addToCart(): void {
+    if (!selectedVariant.value || availableStock.value < 1) return;
+
+    router.post('/carrinho/itens', {
+        product_variant_id: selectedVariant.value.id,
+        quantity: quantity.value,
+    }, { preserveScroll: true });
+}
+
 watch(
     selectedVariantId,
     () => {
         selectedImageId.value =
             visibleImages.value[0]?.id ?? null;
+        quantity.value = 1;
 
     },
     {
@@ -456,9 +477,17 @@ value,
                             }}
                         </p>
 
-                        <p class="mt-4 rounded-[10px] border border-[#293344] bg-[#11151c] px-4 py-3 text-xs leading-5 text-[#aeb6c4]">
-                            A Tech Store está operando como catálogo neste momento. Consulte a disponibilidade antes de finalizar uma compra.
-                        </p>
+                        <div class="mt-4 grid grid-cols-[110px_1fr] gap-3 max-[480px]:grid-cols-1">
+                            <div class="flex h-[48px] items-center justify-between rounded-[10px] border border-[#293344] bg-[#11151c]">
+                                <button type="button" :disabled="quantity <= 1" class="grid h-full w-9 place-items-center text-lg text-[#aeb6c4] hover:text-white disabled:cursor-not-allowed disabled:opacity-30" aria-label="Diminuir quantidade" @click="decreaseQuantity">−</button>
+                                <span class="text-sm font-bold">{{ quantity }}</span>
+                                <button type="button" :disabled="quantity >= maximumQuantity" class="grid h-full w-9 place-items-center text-lg text-[#aeb6c4] hover:text-white disabled:cursor-not-allowed disabled:opacity-30" aria-label="Aumentar quantidade" @click="increaseQuantity">+</button>
+                            </div>
+                            <button type="button" :disabled="availableStock < 1" class="flex h-[48px] items-center justify-center gap-2.5 rounded-[10px] bg-gradient-to-br from-[#4a99ed] to-[#7d61ed] px-5 text-sm font-bold text-white shadow-[0_12px_30px_rgb(75_132_235/20%)] transition-all hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:brightness-100" @click="addToCart">
+                                Adicionar ao carrinho
+                                <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l2.4 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.6L21 7H6" /><circle cx="10" cy="20" r="1" /><circle cx="18" cy="20" r="1" /></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="

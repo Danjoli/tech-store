@@ -58,6 +58,13 @@ class HandleInertiaRequests extends Middleware
             'wishlistCount' => fn (): int => $request->user()
                 ? $request->user()->favoriteProducts()->count()
                 : 0,
+
+            'cartCount' => fn (): int => (int) (
+                $request->user()?->cart()
+                    ->withSum('items', 'quantity')
+                    ->first()?->items_sum_quantity
+                ?? 0
+            ),
         ];
     }
 }

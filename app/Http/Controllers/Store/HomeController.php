@@ -7,13 +7,17 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\Store\ProductCardPresenter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function __invoke(ProductCardPresenter $presenter): Response
+    public function __invoke(Request $request, ProductCardPresenter $presenter): Response
     {
+        $favoriteIds = $request->user()
+            ? $request->user()->favoriteProducts()->pluck('products.id')->all()
+            : [];
         $categories = Category::query()
             ->whereNull('parent_id')
             ->where('is_active', true)
@@ -62,7 +66,10 @@ class HomeController extends Controller
             ->latest('id')
             ->limit(12)
             ->get()
-            ->map(fn (Product $product): array => $presenter->present($product));
+            ->map(fn (Product $product): array => $presenter->present(
+                $product,
+                in_array($product->id, $favoriteIds, true),
+            ));
 
         return Inertia::render('Store/Home', [
             'categories' => $categories,

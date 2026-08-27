@@ -16,6 +16,7 @@ interface SharedPageProps extends PageProps {
         success?: string;
         error?: string;
     };
+    wishlistCount?: number;
     filters?: {
         search?: string;
     };
@@ -26,6 +27,7 @@ const page = usePage<SharedPageProps>();
 const search = ref(page.props.filters?.search ?? '');
 
 const user = computed(() => page.props.auth?.user ?? null);
+const wishlistCount = computed(() => page.props.wishlistCount ?? 0);
 
 const successMessage = computed(
     () => page.props.flash?.success ?? null,
@@ -181,6 +183,13 @@ function submitSearch(): void {
 
                             <path d="M4 21a8 8 0 0 1 16 0" />
                         </svg>
+                    </Link>
+
+                    <Link href="/favoritos" class="relative grid h-10 w-10 place-items-center rounded-[10px] border border-[#222936] bg-[#11151c] text-[#c7cfdb] transition-colors duration-150 hover:border-[#8b80fa] hover:text-white max-[640px]:hidden" :aria-label="`${wishlistCount} favoritos`">
+                        <svg class="h-[22px] w-[22px]" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z" />
+                        </svg>
+                        <b v-if="wishlistCount > 0" class="absolute -right-[5px] -top-[5px] grid h-[17px] min-w-[17px] place-items-center rounded-[9px] bg-[#8d6cff] px-1 text-[10px] text-white">{{ wishlistCount }}</b>
                     </Link>
 
                 </div>

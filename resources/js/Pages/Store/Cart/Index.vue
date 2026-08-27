@@ -66,7 +66,7 @@ function removeItem(item: CartItem): void {
                     <h2 class="text-lg font-bold text-[#f7f9fc]">Resumo</h2>
                     <div class="mt-6 flex justify-between text-sm text-[#aeb6c4]"><span>Itens</span><span>{{ total_items }}</span></div>
                     <div class="mt-4 flex justify-between border-t border-[#293344] pt-4"><span class="font-bold text-[#f7f9fc]">Total</span><strong class="text-xl text-[#f7f9fc]">{{ formatCurrency(total_amount) }}</strong></div>
-                    <p class="mt-5 rounded-xl border border-[#293344] bg-[#0d1117] px-4 py-3 text-xs leading-5 text-[#8b95a5]">O checkout e os meios de pagamento serão habilitados na próxima etapa.</p>
+                    <Link href="/checkout" class="mt-5 block rounded-xl bg-[#4a99ed] px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-[#5ca5f7]">Ir para checkout</Link>
                     <Link href="/produtos" class="mt-5 block text-center text-sm font-bold text-[#6eaef6] hover:text-white">Continuar comprando</Link>
                 </aside>
             </div>

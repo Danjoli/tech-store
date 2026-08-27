@@ -35,6 +35,10 @@ function isActive(url: string): boolean {
                 <Link href="/admin/products" class="block rounded-xl px-3 py-2.5 text-sm font-semibold transition" :class="isActive('/admin/products') ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-300 hover:bg-white/[0.07] hover:text-white'" @click="menuOpen = false">Produtos</Link>
                 <Link href="/admin/categories" class="block rounded-xl px-3 py-2.5 text-sm font-semibold transition" :class="isActive('/admin/categories') ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-300 hover:bg-white/[0.07] hover:text-white'" @click="menuOpen = false">Categorias</Link>
                 <Link href="/admin/brands" class="block rounded-xl px-3 py-2.5 text-sm font-semibold transition" :class="isActive('/admin/brands') ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-300 hover:bg-white/[0.07] hover:text-white'" @click="menuOpen = false">Marcas</Link>
+
+                <p class="px-3 pb-2 pt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-600">Operação</p>
+                <Link href="/admin/orders" class="block rounded-xl px-3 py-2.5 text-sm font-semibold transition" :class="isActive('/admin/orders') ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-300 hover:bg-white/[0.07] hover:text-white'" @click="menuOpen = false">Pedidos</Link>
+                <Link href="/admin/shipments" class="block rounded-xl px-3 py-2.5 text-sm font-semibold transition" :class="isActive('/admin/shipments') ? 'bg-sky-500 text-white shadow-sm' : 'text-slate-300 hover:bg-white/[0.07] hover:text-white'" @click="menuOpen = false">Envios</Link>
             </nav>
 
             <div class="border-t border-white/[0.08] p-4">

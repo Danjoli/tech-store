@@ -12,6 +12,7 @@ use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Services\Store\ProductCardPresenter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,6 +24,9 @@ class ProductController extends Controller
         ProductCardPresenter $presenter,
     ): Response {
         $filters = $request->validated();
+        $favoriteIds = $request->user()
+            ? $request->user()->favoriteProducts()->pluck('products.id')->all()
+            : [];
 
         $products = Product::query()
             ->active()
@@ -218,7 +222,10 @@ class ProductController extends Controller
         $paginatedProducts = $products
             ->paginate(12)
             ->withQueryString()
-            ->through(fn (Product $product): array => $presenter->present($product));
+            ->through(fn (Product $product): array => $presenter->present(
+                $product,
+                in_array($product->id, $favoriteIds, true),
+            ));
 
         $categories = Category::query()
             ->where('is_active', true)
@@ -269,6 +276,7 @@ class ProductController extends Controller
     public function show(
         Product $product,
         ProductCardPresenter $presenter,
+        Request $request,
     ): Response {
         abort_unless(
             $product->status === ProductStatus::ACTIVE,
@@ -296,6 +304,10 @@ class ProductController extends Controller
         $defaultVariant = $product->variants
             ->firstWhere('is_default', true)
             ?? $product->variants->first();
+
+        $favoriteIds = $request->user()
+            ? $request->user()->favoriteProducts()->pluck('products.id')->all()
+            : [];
 
         $relatedProducts = Product::query()
             ->active()
@@ -329,7 +341,10 @@ class ProductController extends Controller
             ->latest()
             ->limit(3)
             ->get()
-            ->map(fn (Product $relatedProduct): array => $presenter->present($relatedProduct));
+            ->map(fn (Product $relatedProduct): array => $presenter->present(
+                $relatedProduct,
+                in_array($relatedProduct->id, $favoriteIds, true),
+            ));
 
         return Inertia::render('Store/Products/Show', [
             'product' => [
@@ -389,6 +404,7 @@ class ProductController extends Controller
                     ->values(),
 
                 'default_variant_id' => $defaultVariant->id,
+                'is_favorited' => in_array($product->id, $favoriteIds, true),
             ],
 
             'relatedProducts' => $relatedProducts,

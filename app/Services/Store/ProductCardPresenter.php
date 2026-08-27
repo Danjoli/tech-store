@@ -14,7 +14,7 @@ class ProductCardPresenter
      *
      * @return array<string, int|string|null>
      */
-    public function present(Product $product): array
+    public function present(Product $product, bool $isFavorited = false): array
     {
         /** @var ProductVariant|null $variant */
         $variant = $product->variants->first();
@@ -32,6 +32,7 @@ class ProductCardPresenter
             'price' => $variant?->price,
             'sale_price' => $variant?->sale_price,
             'available_stock' => $variant?->availableStock() ?? 0,
+            'is_favorited' => $isFavorited,
         ];
     }
 }

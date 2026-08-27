@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
 interface Product {
@@ -12,6 +12,7 @@ interface Product {
     price: string | number | null;
     sale_price: string | number | null;
     available_stock: number;
+    is_favorited: boolean;
 }
 
 const props = defineProps<{
@@ -61,6 +62,12 @@ function formatCurrency(value: number): string {
         currency: 'BRL',
     }).format(value);
 }
+
+function toggleFavorite(): void {
+    router.post(`/favoritos/${props.product.slug}/alternar`, {}, {
+        preserveScroll: true,
+    });
+}
 </script>
 
 <template>
@@ -86,6 +93,18 @@ function formatCurrency(value: number): string {
                 ">
                 {{ discountPercentage }}% OFF
             </span>
+
+            <button
+                type="button"
+                class="absolute right-3 top-3 z-30 grid h-[34px] w-[34px] place-items-center rounded-[9px] border border-white/15 bg-[#0a0d13]/70 text-[#d1d6df] backdrop-blur-sm transition-colors duration-200 hover:border-[#8b80fa] hover:bg-[#6f60ec] hover:text-white"
+                :class="product.is_favorited ? 'border-[#8b80fa] bg-[#6f60ec] text-white' : ''"
+                :aria-label="product.is_favorited ? `Remover ${product.name} dos favoritos` : `Adicionar ${product.name} aos favoritos`"
+                @click.prevent="toggleFavorite"
+            >
+                <svg class="h-[17px] w-[17px]" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z" :fill="product.is_favorited ? 'currentColor' : 'none'" />
+                </svg>
+            </button>
 
             <Link :href="`/produtos/${product.slug}`" class="block h-full w-full">
                 <img v-if="product.image_url" :src="product.image_url" :alt="product.name" loading="lazy" class="

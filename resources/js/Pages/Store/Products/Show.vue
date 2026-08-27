@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ProductCard from '@/Components/Store/ProductCard.vue';
 import StoreLayout from '@/Layouts/StoreLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
 
 interface ProductImage {
@@ -40,6 +40,7 @@ interface Product {
     images: ProductImage[];
     variants: ProductVariant[];
     default_variant_id: number;
+    is_favorited: boolean;
 }
 
 interface RelatedProduct {
@@ -148,6 +149,12 @@ function formatCurrency(value: number): string {
 
 function selectVariant(variantId: number): void {
     selectedVariantId.value = variantId;
+}
+
+function toggleFavorite(): void {
+    router.post(`/favoritos/${props.product.slug}/alternar`, {}, {
+        preserveScroll: true,
+    });
 }
 
 watch(
@@ -297,14 +304,23 @@ watch(
                         }}
                     </p>
 
-                    <h1 class="
-                            mt-4 text-[clamp(34px,4vw,54px)]
-                            font-normal leading-[1.04]
-                            tracking-[-0.05em]
-                            text-[#f7f9fc]
-                        ">
-                        {{ product.name }}
-                    </h1>
+                    <div class="mt-4 flex items-start justify-between gap-5">
+                        <h1 class="text-[clamp(34px,4vw,54px)] font-normal leading-[1.04] tracking-[-0.05em] text-[#f7f9fc]">
+                            {{ product.name }}
+                        </h1>
+
+                        <button
+                            type="button"
+                            class="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-[#293344] bg-[#11151c] text-[#c7cfdb] transition hover:border-[#8b80fa] hover:text-white"
+                            :class="product.is_favorited ? 'border-[#8b80fa] bg-[#6f60ec] text-white' : ''"
+                            :aria-label="product.is_favorited ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+                            @click="toggleFavorite"
+                        >
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.5 5.5 0 0 0 0-7.8Z" :fill="product.is_favorited ? 'currentColor' : 'none'" />
+                            </svg>
+                        </button>
+                    </div>
 
                     <div class="
                             mt-5 flex flex-wrap

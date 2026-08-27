@@ -54,6 +54,10 @@ class HandleInertiaRequests extends Middleware
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
             ],
+
+            'wishlistCount' => fn (): int => $request->user()
+                ? $request->user()->favoriteProducts()->count()
+                : 0,
         ];
     }
 }

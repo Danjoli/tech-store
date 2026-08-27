@@ -35,4 +35,4 @@ Os testes usam SQLite em memória automaticamente; a aplicação pode continuar 
 
 ## Escopo atual
 
-O catálogo, os favoritos, o perfil e o carrinho estão prontos para operação. Checkout, pagamentos, pedidos e integrações de entrega continuam fora do escopo até que as regras comerciais e os provedores sejam definidos.
+O catálogo, os favoritos, o perfil, o carrinho, o checkout e a gestão de pedidos/envios estão prontos. Pagamentos iniciam em sandbox; uma cobrança real depende da escolha e configuração de um gateway.

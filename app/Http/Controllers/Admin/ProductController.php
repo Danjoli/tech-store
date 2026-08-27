@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Catalog\SaveProductAction;
 use App\Enums\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreProductRequest;
@@ -9,13 +10,9 @@ use App\Http\Requests\Admin\UpdateProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\ProductVariant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -112,25 +109,9 @@ class ProductController extends Controller
 
     public function store(
         StoreProductRequest $request,
+        SaveProductAction $saveProduct,
     ): RedirectResponse {
-        $validated = $request->validated();
-
-        DB::transaction(function () use ($validated): void {
-            $productData = $this->productData($validated);
-            $productData['slug'] = $this->generateUniqueSlug(
-                $productData['name'],
-            );
-            $productData['published_at'] =
-                $productData['status'] === ProductStatus::ACTIVE->value
-                    ? now()
-                    : null;
-
-            $product = Product::create($productData);
-
-            $product->variants()->create(
-                $this->variantData($validated),
-            );
-        });
+        $saveProduct->handle($request->validated());
 
         return to_route('admin.products.index')
             ->with('success', 'Produto cadastrado com sucesso.');
@@ -172,10 +153,8 @@ class ProductController extends Controller
                 'sale_price' => $variant?->sale_price,
                 'cost_price' => $variant?->cost_price,
                 'stock' => $variant?->stock ?? 0,
-                'low_stock_threshold' =>
-                    $variant?->low_stock_threshold ?? 5,
-                'variant_is_active' =>
-                    $variant?->is_active ?? true,
+                'low_stock_threshold' => $variant?->low_stock_threshold ?? 5,
+                'variant_is_active' => $variant?->is_active ?? true,
             ],
             'brands' => $this->brandOptions(),
             'categories' => $this->categoryOptions(),
@@ -186,45 +165,9 @@ class ProductController extends Controller
     public function update(
         UpdateProductRequest $request,
         Product $product,
+        SaveProductAction $saveProduct,
     ): RedirectResponse {
-        $validated = $request->validated();
-
-        DB::transaction(
-            function () use ($validated, $product): void {
-                $productData = $this->productData($validated);
-
-                if ($productData['name'] !== $product->name) {
-                    $productData['slug'] = $this->generateUniqueSlug(
-                        $productData['name'],
-                        $product,
-                    );
-                }
-
-                $wasActive =
-                    $product->status === ProductStatus::ACTIVE;
-
-                $willBeActive =
-                    $productData['status']
-                    === ProductStatus::ACTIVE->value;
-
-                if ($willBeActive && ! $wasActive) {
-                    $productData['published_at'] = now();
-                } elseif (! $willBeActive) {
-                    $productData['published_at'] = null;
-                }
-
-                $product->update($productData);
-
-                $variantData = $this->variantData($validated);
-                $variant = $product->defaultVariant;
-
-                if ($variant) {
-                    $variant->update($variantData);
-                } else {
-                    $product->variants()->create($variantData);
-                }
-            },
-        );
+        $saveProduct->handle($request->validated(), $product);
 
         return to_route('admin.products.index')
             ->with('success', 'Produto atualizado com sucesso.');
@@ -236,53 +179,6 @@ class ProductController extends Controller
 
         return to_route('admin.products.index')
             ->with('success', 'Produto excluído com sucesso.');
-    }
-
-    /**
-     * @param array<string, mixed> $validated
-     * @return array<string, mixed>
-     */
-    private function productData(array $validated): array
-    {
-        return Arr::only($validated, [
-            'brand_id',
-            'category_id',
-            'name',
-            'short_description',
-            'description',
-            'status',
-            'is_featured',
-            'warranty_months',
-            'weight',
-            'height',
-            'width',
-            'length',
-            'seo_title',
-            'seo_description',
-        ]);
-    }
-
-    /**
-     * @param array<string, mixed> $validated
-     * @return array<string, mixed>
-     */
-    private function variantData(array $validated): array
-    {
-        return [
-            'name' => $validated['variant_name'],
-            'sku' => $validated['sku'],
-            'barcode' => $validated['barcode'] ?? null,
-            'price' => $validated['price'],
-            'sale_price' => $validated['sale_price'] ?? null,
-            'cost_price' => $validated['cost_price'] ?? null,
-            'stock' => $validated['stock'],
-            'reserved_stock' => 0,
-            'low_stock_threshold' =>
-                $validated['low_stock_threshold'],
-            'attributes' => null,
-            'is_default' => true,
-            'is_active' => $validated['variant_is_active'],
-        ];
     }
 
     /**
@@ -325,45 +221,12 @@ class ProductController extends Controller
      */
     private function statusOptions(): array
     {
-        return [
-            [
-                'value' => ProductStatus::DRAFT->value,
-                'label' => 'Rascunho',
+        return array_map(
+            fn (ProductStatus $status): array => [
+                'value' => $status->value,
+                'label' => $status->label(),
             ],
-            [
-                'value' => ProductStatus::ACTIVE->value,
-                'label' => 'Ativo',
-            ],
-            [
-                'value' => ProductStatus::INACTIVE->value,
-                'label' => 'Inativo',
-            ],
-        ];
-    }
-
-    private function generateUniqueSlug(
-        string $name,
-        ?Product $ignoredProduct = null,
-    ): string {
-        $baseSlug = Str::slug($name) ?: 'produto';
-        $slug = $baseSlug;
-        $suffix = 2;
-
-        while (
-            Product::withTrashed()
-                ->where('slug', $slug)
-                ->when(
-                    $ignoredProduct,
-                    fn ($query) => $query->whereKeyNot(
-                        $ignoredProduct->id,
-                    ),
-                )
-                ->exists()
-        ) {
-            $slug = "{$baseSlug}-{$suffix}";
-            $suffix++;
-        }
-
-        return $slug;
+            ProductStatus::cases(),
+        );
     }
 }

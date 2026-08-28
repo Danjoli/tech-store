@@ -19,7 +19,7 @@ class OrderController extends Controller
 
     public function show(Request $request, Order $order): Response
     {
-        abort_unless($order->user_id === $request->user()->id, 404);
+        $this->authorize('view', $order);
         $order->load(['items', 'payment', 'shipment']);
 
         return Inertia::render('Store/Orders/Show', ['order' => [...$this->summary($order), 'items' => $order->items, 'shipping_address' => $order->shipping_address]]);

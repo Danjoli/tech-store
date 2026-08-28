@@ -17,7 +17,9 @@ class ProductImageManagementTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Product $product;
+
     private ProductVariant $variant;
 
     protected function setUp(): void

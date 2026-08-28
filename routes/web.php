@@ -20,7 +20,7 @@ Route::name('store.')->group(function (): void {
         ->name('products.show');
 });
 
-Route::middleware('auth')->name('store.favorites.')->group(function (): void {
+Route::middleware(['auth', 'verified', 'throttle:favorites'])->name('store.favorites.')->group(function (): void {
     Route::get('/favoritos', [FavoriteController::class, 'index'])
         ->name('index');
     Route::post('/favoritos/{product:slug}/alternar', [FavoriteController::class, 'toggle'])
@@ -32,19 +32,19 @@ Route::middleware('auth')->name('store.profile.')->group(function (): void {
     Route::put('/perfil', [ProfileController::class, 'update'])->name('update');
 });
 
-Route::middleware('auth')->name('store.cart.')->group(function (): void {
+Route::middleware(['auth', 'verified', 'throttle:cart'])->name('store.cart.')->group(function (): void {
     Route::get('/carrinho', [CartController::class, 'index'])->name('index');
     Route::post('/carrinho/itens', [CartController::class, 'store'])->name('items.store');
     Route::put('/carrinho/itens/{cartItem}', [CartController::class, 'update'])->name('items.update');
     Route::delete('/carrinho/itens/{cartItem}', [CartController::class, 'destroy'])->name('items.destroy');
 });
 
-Route::middleware('auth')->name('store.checkout.')->group(function (): void {
+Route::middleware(['auth', 'verified', 'throttle:checkout'])->name('store.checkout.')->group(function (): void {
     Route::get('/checkout', [CheckoutController::class, 'create'])->name('create');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('store');
 });
 
-Route::middleware('auth')->name('store.orders.')->group(function (): void {
+Route::middleware(['auth', 'verified'])->name('store.orders.')->group(function (): void {
     Route::get('/pedidos', [OrderController::class, 'index'])->name('index');
     Route::get('/pedidos/{order}', [OrderController::class, 'show'])->name('show');
 });

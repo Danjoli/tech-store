@@ -78,8 +78,7 @@ class ProductImageController extends Controller
                         ->exists();
 
                     foreach (
-                        $request->file('images', [])
-                        as $position => $uploadedImage
+                        $request->file('images', []) as $position => $uploadedImage
                     ) {
                         $path = $uploadedImage->store(
                             "products/{$product->id}",
@@ -93,8 +92,7 @@ class ProductImageController extends Controller
                             'path' => $path,
                             'alt_text' => $product->name,
                             'sort_order' => $nextOrder + $position,
-                            'is_primary' =>
-                                ! $hasPrimaryImage
+                            'is_primary' => ! $hasPrimaryImage
                                 && $position === 0,
                         ]);
                     }

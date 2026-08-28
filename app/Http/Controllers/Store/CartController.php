@@ -43,7 +43,7 @@ class CartController extends Controller
         CartItem $cartItem,
         UpdateCartItemQuantityAction $updateQuantity,
     ): RedirectResponse {
-        $this->ensureOwnership($request, $cartItem);
+        $this->authorize('update', $cartItem);
 
         $updateQuantity->handle($cartItem, $request->integer('quantity'));
 
@@ -52,14 +52,9 @@ class CartController extends Controller
 
     public function destroy(Request $request, CartItem $cartItem): RedirectResponse
     {
-        $this->ensureOwnership($request, $cartItem);
+        $this->authorize('delete', $cartItem);
         $cartItem->delete();
 
         return back()->with('success', 'Produto removido do carrinho.');
-    }
-
-    private function ensureOwnership(Request $request, CartItem $cartItem): void
-    {
-        abort_unless($cartItem->cart()->where('user_id', $request->user()->id)->exists(), 404);
     }
 }

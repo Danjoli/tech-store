@@ -5,11 +5,11 @@ namespace Tests\Feature\Admin;
 use App\Models\Brand;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
-use Illuminate\Filesystem\FilesystemAdapter;
 use Tests\TestCase;
 
 class BrandManagementTest extends TestCase

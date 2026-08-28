@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Catalog;
+namespace Tests\Feature\Database;
 
 use Database\Seeders\BrandSeeder;
 use Database\Seeders\CategorySeeder;

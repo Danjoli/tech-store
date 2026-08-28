@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\Development;
 
 use App\Enums\ProductStatus;
 use App\Models\Brand;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 
-class TechStoreCatalogSeeder extends Seeder
+class RemoteCatalogSeeder extends Seeder
 {
     public function run(): void
     {

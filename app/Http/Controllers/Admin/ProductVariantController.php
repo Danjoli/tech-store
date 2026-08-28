@@ -30,8 +30,7 @@ class ProductVariantController extends Controller
                 'stock' => $variant->stock,
                 'reserved_stock' => $variant->reserved_stock,
                 'available_stock' => $variant->availableStock(),
-                'low_stock_threshold' =>
-                    $variant->low_stock_threshold,
+                'low_stock_threshold' => $variant->low_stock_threshold,
                 'is_low_stock' => $variant->isLowStock(),
                 'attributes' => $variant->attributes ?? [],
                 'is_default' => $variant->is_default,
@@ -99,8 +98,7 @@ class ProductVariantController extends Controller
                 'cost_price' => $variant->cost_price,
                 'stock' => $variant->stock,
                 'reserved_stock' => $variant->reserved_stock,
-                'low_stock_threshold' =>
-                    $variant->low_stock_threshold,
+                'low_stock_threshold' => $variant->low_stock_threshold,
                 'attributes' => $variant->attributes ?? [],
                 'is_default' => $variant->is_default,
                 'is_active' => $variant->is_active,
@@ -169,7 +167,7 @@ class ProductVariantController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $validated
+     * @param  array<string, mixed>  $validated
      * @return array<string, mixed>
      */
     private function variantData(array $validated): array
@@ -178,8 +176,7 @@ class ProductVariantController extends Controller
             ->map(fn ($value) => is_string($value)
                 ? trim($value)
                 : $value)
-            ->filter(fn ($value, $key): bool =>
-                is_string($key)
+            ->filter(fn ($value, $key): bool => is_string($key)
                 && trim($key) !== ''
                 && $value !== null
                 && $value !== '')
@@ -193,8 +190,7 @@ class ProductVariantController extends Controller
             'sale_price' => $validated['sale_price'] ?? null,
             'cost_price' => $validated['cost_price'] ?? null,
             'stock' => $validated['stock'],
-            'low_stock_threshold' =>
-                $validated['low_stock_threshold'],
+            'low_stock_threshold' => $validated['low_stock_threshold'],
             'attributes' => $attributes ?: null,
             'is_default' => $validated['is_default'],
             'is_active' => $validated['is_active'],

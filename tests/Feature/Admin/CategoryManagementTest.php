@@ -73,7 +73,7 @@ class CategoryManagementTest extends TestCase
         /** @var FilesystemAdapter $disk */
         $disk = Storage::disk('public');
 
-        $disk->assertExists($category->image_path,);
+        $disk->assertExists($category->image_path);
     }
 
     public function test_admin_can_create_subcategory(): void

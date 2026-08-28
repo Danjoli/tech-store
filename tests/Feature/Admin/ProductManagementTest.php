@@ -17,7 +17,9 @@ class ProductManagementTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private Brand $brand;
+
     private Category $category;
 
     protected function setUp(): void
@@ -258,7 +260,7 @@ class ProductManagementTest extends TestCase
     }
 
     /**
-     * @param array<string, mixed> $overrides
+     * @param  array<string, mixed>  $overrides
      * @return array<string, mixed>
      */
     private function validPayload(array $overrides = []): array

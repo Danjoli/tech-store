@@ -12,7 +12,7 @@ interface Product {
     price: string | number | null;
     sale_price: string | number | null;
     available_stock: number;
-    is_favorited: boolean;
+    is_favorited?: boolean;
 }
 
 const props = defineProps<{

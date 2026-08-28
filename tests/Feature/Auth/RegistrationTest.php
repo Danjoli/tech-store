@@ -3,6 +3,7 @@
 namespace Tests\Feature\Auth;
 
 use App\Enums\UserRole;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -46,7 +47,7 @@ class RegistrationTest extends TestCase
 
     public function test_registration_requires_unique_email(): void
     {
-        \App\Models\User::factory()->create([
+        User::factory()->create([
             'email' => 'danilo@example.com',
         ]);
 

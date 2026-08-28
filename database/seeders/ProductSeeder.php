@@ -80,10 +80,8 @@ class ProductSeeder extends Seeder
                 'category' => 'notebooks-gamers',
                 'name' => 'Notebook Apex Pro 15',
                 'slug' => 'notebook-apex-pro-15',
-                'short_description' =>
-                    'Notebook gamer com alto desempenho para jogos e criação.',
-                'description' =>
-                    'Equipado com processador de alta performance, placa de vídeo dedicada e tela de alta frequência.',
+                'short_description' => 'Notebook gamer com alto desempenho para jogos e criação.',
+                'description' => 'Equipado com processador de alta performance, placa de vídeo dedicada e tela de alta frequência.',
                 'is_featured' => true,
                 'warranty_months' => 12,
                 'weight' => 2.300,
@@ -169,10 +167,8 @@ class ProductSeeder extends Seeder
                 'category' => 'monitores',
                 'name' => 'Monitor UltraView 27 QHD',
                 'slug' => 'monitor-ultraview-27-qhd',
-                'short_description' =>
-                    'Monitor QHD de 27 polegadas para jogos e produtividade.',
-                'description' =>
-                    'Painel de alta definição com cores precisas e alta taxa de atualização.',
+                'short_description' => 'Monitor QHD de 27 polegadas para jogos e produtividade.',
+                'description' => 'Painel de alta definição com cores precisas e alta taxa de atualização.',
                 'is_featured' => true,
                 'warranty_months' => 24,
                 'weight' => 5.200,
@@ -238,10 +234,8 @@ class ProductSeeder extends Seeder
                 'category' => 'teclados',
                 'name' => 'Teclado Mecânico Pulse 75',
                 'slug' => 'teclado-mecanico-pulse-75',
-                'short_description' =>
-                    'Teclado mecânico compacto com iluminação RGB.',
-                'description' =>
-                    'Formato 75%, switches mecânicos e conexão USB-C removível.',
+                'short_description' => 'Teclado mecânico compacto com iluminação RGB.',
+                'description' => 'Formato 75%, switches mecânicos e conexão USB-C removível.',
                 'is_featured' => true,
                 'warranty_months' => 12,
                 'weight' => 0.850,
@@ -318,10 +312,8 @@ class ProductSeeder extends Seeder
                 'category' => 'workstations',
                 'name' => 'Setup Core RTX Creator',
                 'slug' => 'setup-core-rtx-creator',
-                'short_description' =>
-                    'Computador de alta performance para criação profissional.',
-                'description' =>
-                    'Workstation desenvolvida para edição, renderização, programação e jogos.',
+                'short_description' => 'Computador de alta performance para criação profissional.',
+                'description' => 'Workstation desenvolvida para edição, renderização, programação e jogos.',
                 'is_featured' => true,
                 'warranty_months' => 24,
                 'weight' => 12.500,
@@ -400,10 +392,8 @@ class ProductSeeder extends Seeder
                 'category' => 'mouses',
                 'name' => 'Mouse Vector Pro Wireless',
                 'slug' => 'mouse-vector-pro-wireless',
-                'short_description' =>
-                    'Mouse sem fio leve e preciso para jogos.',
-                'description' =>
-                    'Sensor de alta precisão, baixa latência e bateria de longa duração.',
+                'short_description' => 'Mouse sem fio leve e preciso para jogos.',
+                'description' => 'Sensor de alta precisão, baixa latência e bateria de longa duração.',
                 'is_featured' => false,
                 'warranty_months' => 12,
                 'weight' => 0.065,
@@ -478,10 +468,8 @@ class ProductSeeder extends Seeder
                 'category' => 'headsets',
                 'name' => 'Headset Orbit 7.1',
                 'slug' => 'headset-orbit-7-1',
-                'short_description' =>
-                    'Headset com áudio virtual 7.1 e microfone removível.',
-                'description' =>
-                    'Áudio imersivo, construção confortável e comunicação clara.',
+                'short_description' => 'Headset com áudio virtual 7.1 e microfone removível.',
+                'description' => 'Áudio imersivo, construção confortável e comunicação clara.',
                 'is_featured' => false,
                 'warranty_months' => 12,
                 'weight' => 0.320,

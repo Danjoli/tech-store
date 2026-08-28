@@ -4,13 +4,16 @@ namespace App\Actions\Store\Checkout;
 
 use App\Data\CheckoutData;
 use App\Enums\OrderStatus;
-use App\Enums\PaymentMethod;
-use App\Enums\PaymentStatus;
 use App\Enums\ShipmentStatus;
 use App\Models\Address;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\ProductVariant;
 use App\Models\User;
+use App\Services\Payments\PaymentService;
+use App\Services\Store\OrderStockService;
+use App\Services\Store\ShippingQuoteService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -18,6 +21,12 @@ use Illuminate\Validation\ValidationException;
 
 class CreateOrderFromCartAction
 {
+    public function __construct(
+        private PaymentService $payments,
+        private OrderStockService $stock,
+        private ShippingQuoteService $shipping,
+    ) {}
+
     public function handle(User $user, CheckoutData $checkout): Order
     {
         return DB::transaction(function () use ($user, $checkout): Order {
@@ -28,24 +37,29 @@ class CreateOrderFromCartAction
             }
 
             $items = $cart->items;
+            $variants = $this->lockVariants($items->pluck('product_variant_id')->all());
             $subtotal = 0.0;
 
             foreach ($items as $item) {
-                if (! $item->variant->is_active || $item->variant->availableStock() < $item->quantity) {
+                $variant = $variants->get($item->product_variant_id);
+
+                if (! $variant || ! $variant->is_active || $variant->availableStock() < $item->quantity) {
                     throw ValidationException::withMessages(['cart' => "O item {$item->variant->product->name} não possui estoque suficiente."]);
                 }
 
-                $subtotal += (float) $item->variant->currentPrice() * $item->quantity;
+                $item->setRelation('variant', $variant);
+                $subtotal += (float) $variant->currentPrice() * $item->quantity;
             }
 
             $address = $this->storeAddress($user, $checkout);
+            $shippingAmount = $this->shipping->quote($cart, $checkout);
             $order = Order::create([
                 'user_id' => $user->id,
                 'number' => 'TS-'.now()->format('ymd').'-'.Str::upper(Str::random(6)),
                 'status' => OrderStatus::PENDING_PAYMENT,
                 'subtotal' => $subtotal,
-                'shipping_amount' => 0,
-                'total_amount' => $subtotal,
+                'shipping_amount' => $shippingAmount,
+                'total_amount' => $subtotal + $shippingAmount,
                 'shipping_address' => $address->only(['recipient_name', 'phone', 'zip', 'street', 'number', 'complement', 'district', 'city', 'state']),
             ]);
 
@@ -64,20 +78,18 @@ class CreateOrderFromCartAction
                 ]);
             }
 
-            $method = $checkout->paymentMethod();
-            $status = $method === PaymentMethod::CARD ? PaymentStatus::APPROVED : PaymentStatus::PENDING;
-            $order->payment()->create([
-                'provider' => config('payments.driver'),
-                'method' => $method,
-                'status' => $status,
-                'amount' => $subtotal,
-                'external_id' => 'sandbox_'.Str::uuid(),
-                'metadata' => $this->sandboxMetadata($method),
-                'paid_at' => $status === PaymentStatus::APPROVED ? now() : null,
-            ]);
+            $payment = $this->payments->createFor($order, $checkout->paymentMethod());
 
-            if ($status === PaymentStatus::APPROVED) {
+            if ($payment->status->value === 'approved') {
+                foreach ($items as $item) {
+                    $this->stock->commitSale($item->variant, $item->quantity);
+                }
+
                 $order->update(['status' => OrderStatus::PROCESSING]);
+            } else {
+                foreach ($items as $item) {
+                    $this->stock->reserve($item->variant, $item->quantity);
+                }
             }
 
             $order->shipment()->create(['status' => ShipmentStatus::PENDING]);
@@ -87,21 +99,22 @@ class CreateOrderFromCartAction
         });
     }
 
+    /** @return Collection<int, ProductVariant> */
+    private function lockVariants(array $variantIds): Collection
+    {
+        return ProductVariant::query()
+            ->with('product')
+            ->whereKey($variantIds)
+            ->lockForUpdate()
+            ->get()
+            ->keyBy('id');
+    }
+
     private function storeAddress(User $user, CheckoutData $checkout): Address
     {
         $data = Arr::only($checkout->data, ['recipient_name', 'phone', 'zip', 'street', 'number', 'complement', 'district', 'city', 'state']);
         $user->addresses()->update(['is_default' => false]);
 
         return $user->addresses()->create([...$data, 'is_default' => true]);
-    }
-
-    /** @return array<string, string> */
-    private function sandboxMetadata(PaymentMethod $method): array
-    {
-        return match ($method) {
-            PaymentMethod::PIX => ['instruction' => 'Pagamento Pix em modo sandbox.'],
-            PaymentMethod::BOLETO => ['instruction' => 'Boleto em modo sandbox.'],
-            PaymentMethod::CARD => ['instruction' => 'Cartão aprovado em modo sandbox.'],
-        };
     }
 }

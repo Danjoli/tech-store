@@ -29,8 +29,8 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Danilo Teste',
             'email' => 'danilo@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Senha!Segura2026',
+            'password_confirmation' => 'Senha!Segura2026',
         ]);
 
         $this->assertAuthenticated();
@@ -54,8 +54,8 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Outro usuário',
             'email' => 'danilo@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Senha!Segura2026',
+            'password_confirmation' => 'Senha!Segura2026',
         ]);
 
         $response->assertSessionHasErrors('email');
@@ -68,11 +68,23 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Danilo Teste',
             'email' => 'danilo@example.com',
-            'password' => 'password',
+            'password' => 'Senha!Segura2026',
             'password_confirmation' => 'different-password',
         ]);
 
         $response->assertSessionHasErrors('password');
+
+        $this->assertGuest();
+    }
+
+    public function test_registration_requires_a_strong_password(): void
+    {
+        $this->post('/register', [
+            'name' => 'Danilo Teste',
+            'email' => 'danilo@example.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ])->assertSessionHasErrors('password');
 
         $this->assertGuest();
     }

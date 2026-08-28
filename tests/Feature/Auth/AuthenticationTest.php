@@ -73,6 +73,15 @@ class AuthenticationTest extends TestCase
         $response->assertSessionHasErrors('email');
     }
 
+    public function test_an_inactive_account_cannot_continue_using_an_existing_session(): void
+    {
+        $user = User::factory()->inactive()->create();
+
+        $this->actingAs($user)
+            ->get('/perfil')
+            ->assertForbidden();
+    }
+
     public function test_authenticated_user_can_logout(): void
     {
         $user = User::factory()->create();

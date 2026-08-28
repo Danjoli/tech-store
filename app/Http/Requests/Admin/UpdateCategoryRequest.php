@@ -45,6 +45,7 @@ class UpdateCategoryRequest extends FormRequest
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
+                'dimensions:max_width=3000,max_height=3000',
                 'max:2048',
             ],
             'remove_image' => [
@@ -73,6 +74,7 @@ class UpdateCategoryRequest extends FormRequest
             'name.unique' => 'Já existe uma categoria com esse nome.',
             'image.image' => 'O arquivo deve ser uma imagem.',
             'image.mimes' => 'A imagem deve ser JPG, PNG ou WebP.',
+            'image.dimensions' => 'A imagem deve possuir no máximo 3000 por 3000 pixels.',
             'image.max' => 'A imagem deve possuir no máximo 2 MB.',
             'sort_order.required' => 'Informe a ordem de exibição.',
             'sort_order.min' => 'A ordem não pode ser negativa.',

@@ -1,13 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProductImageController;
-use App\Http\Controllers\Admin\ProductVariantController;
-use App\Http\Controllers\Admin\ShipmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'admin'])
@@ -17,49 +10,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/', DashboardController::class)
             ->name('dashboard');
 
-        Route::resource('brands', BrandController::class);
-        Route::resource('categories', CategoryController::class);
-        Route::resource('products', ProductController::class);
-        Route::resource('orders', OrderController::class)->only(['index', 'show']);
-        Route::resource('shipments', ShipmentController::class)->only(['index', 'edit', 'update']);
-
-        Route::prefix('products/{product}/variants')
-            ->name('products.variants.')
-            ->scopeBindings()
-            ->group(function (): void {
-                Route::get('/', [ProductVariantController::class, 'index'])
-                    ->name('index');
-
-                Route::get('/create', [ProductVariantController::class, 'create'])
-                    ->name('create');
-
-                Route::post('/', [ProductVariantController::class, 'store'])
-                    ->name('store');
-
-                Route::get('/{variant}/edit', [ProductVariantController::class, 'edit'])
-                    ->name('edit');
-
-                Route::put('/{variant}', [ProductVariantController::class, 'update'])
-                    ->name('update');
-
-                Route::delete('/{variant}', [ProductVariantController::class, 'destroy'])
-                    ->name('destroy');
-            });
-
-        Route::prefix('products/{product}/images')
-            ->name('products.images.')
-            ->scopeBindings()
-            ->group(function (): void {
-                Route::get('/', [ProductImageController::class, 'index'])
-                    ->name('index');
-
-                Route::post('/', [ProductImageController::class, 'store'])
-                    ->name('store');
-
-                Route::put('/{image}', [ProductImageController::class, 'update'])
-                    ->name('update');
-
-                Route::delete('/{image}', [ProductImageController::class, 'destroy'])
-                    ->name('destroy');
-            });
+        require __DIR__.'/admin/catalog.php';
+        require __DIR__.'/admin/orders.php';
+        require __DIR__.'/admin/shipments.php';
     });

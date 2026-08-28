@@ -1,52 +1,29 @@
 <?php
 
-use App\Http\Controllers\Store\CartController;
-use App\Http\Controllers\Store\CheckoutController;
-use App\Http\Controllers\Store\FavoriteController;
-use App\Http\Controllers\Store\HomeController;
-use App\Http\Controllers\Store\OrderController;
-use App\Http\Controllers\Store\ProductController;
-use App\Http\Controllers\Store\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('store.')->group(function (): void {
-    Route::get('/', HomeController::class)
-        ->name('home');
-
-    Route::get('/produtos', [ProductController::class, 'index'])
-        ->name('products.index');
-
-    Route::get('/produtos/{product:slug}', [ProductController::class, 'show'])
-        ->name('products.show');
+    require __DIR__.'/store/catalog.php';
 });
 
 Route::middleware(['auth', 'verified', 'throttle:favorites'])->name('store.favorites.')->group(function (): void {
-    Route::get('/favoritos', [FavoriteController::class, 'index'])
-        ->name('index');
-    Route::post('/favoritos/{product:slug}/alternar', [FavoriteController::class, 'toggle'])
-        ->name('toggle');
+    require __DIR__.'/store/favorites.php';
 });
 
 Route::middleware('auth')->name('store.profile.')->group(function (): void {
-    Route::get('/perfil', [ProfileController::class, 'show'])->name('show');
-    Route::put('/perfil', [ProfileController::class, 'update'])->name('update');
+    require __DIR__.'/store/profile.php';
 });
 
 Route::middleware(['auth', 'verified', 'throttle:cart'])->name('store.cart.')->group(function (): void {
-    Route::get('/carrinho', [CartController::class, 'index'])->name('index');
-    Route::post('/carrinho/itens', [CartController::class, 'store'])->name('items.store');
-    Route::put('/carrinho/itens/{cartItem}', [CartController::class, 'update'])->name('items.update');
-    Route::delete('/carrinho/itens/{cartItem}', [CartController::class, 'destroy'])->name('items.destroy');
+    require __DIR__.'/store/cart.php';
 });
 
 Route::middleware(['auth', 'verified', 'throttle:checkout'])->name('store.checkout.')->group(function (): void {
-    Route::get('/checkout', [CheckoutController::class, 'create'])->name('create');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('store');
+    require __DIR__.'/store/checkout.php';
 });
 
 Route::middleware(['auth', 'verified'])->name('store.orders.')->group(function (): void {
-    Route::get('/pedidos', [OrderController::class, 'index'])->name('index');
-    Route::get('/pedidos/{order}', [OrderController::class, 'show'])->name('show');
+    require __DIR__.'/store/orders.php';
 });
 
 require __DIR__.'/admin.php';

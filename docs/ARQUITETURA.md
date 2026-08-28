@@ -4,6 +4,12 @@
 
 A Tech Store usa Laravel 12 no back-end e Inertia + Vue 3 no front-end. A mesma aplicação entrega a vitrine em `resources/js/Pages/Store` e o painel em `resources/js/Pages/Admin`, sem duplicar API ou regras de autorização.
 
+## Rotas
+
+`routes/web.php` é somente o ponto de composição da loja. Os módulos ficam em `routes/store` por capacidade (`catalog`, `favorites`, `profile`, `cart`, `checkout` e `orders`). `routes/admin.php` aplica o middleware comum do painel e carrega `routes/admin/catalog.php`, `orders.php` e `shipments.php`.
+
+Essa divisão preserva URLs e nomes de rota, evita arquivos extensos e não cria uma hierarquia artificial: cada módulo corresponde a um domínio de navegação ou operação.
+
 ## Camadas
 
 - `app/Http/Controllers/Store`: controla a leitura do catálogo público.
@@ -40,3 +46,7 @@ Pedidos e itens do carrinho usam Policies para garantir que somente o dono consi
 O checkout mantém uma transação única: bloqueia as variações compradas, recalcula o saldo disponível, grava o snapshot do pedido, cria a tentativa de pagamento e cria o envio. No sandbox, cartão é aprovado para teste e baixa o estoque; Pix e boleto ficam pendentes e reservam unidades em `reserved_stock`.
 
 Em produção, a confirmação ou recusa do pagamento deve vir de um webhook autenticado do gateway. Essa integração ainda depende da escolha do provedor; não basta alterar `PAYMENTS_DRIVER` ou `PAYMENTS_MODE` no `.env`.
+
+## Testes
+
+`tests/Feature` é organizado por fronteira do sistema: `Admin`, `Store`, `Database` e `Http`. Esses cenários usam SQLite em memória e cobrem rotas, persistência, seeders, autorização e fluxos de compra. `tests/Unit` fica reservado para regras puras, sem banco, HTTP ou container do Laravel.

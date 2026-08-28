@@ -34,7 +34,11 @@ O saldo disponível é `stock - reserved_stock`. O dashboard lista variações a
 
 ## Dados de demonstração
 
-`DatabaseSeeder` chama `TechStoreCatalogSeeder`, que cria o catálogo de exemplo. Em ambiente que pode receber dados reais, não execute seeders indiscriminadamente. Para refazer somente dados de demonstração em ambiente descartável use:
+`DatabaseSeeder` cria um catálogo local e determinístico por meio de `BrandSeeder`, `CategorySeeder`, `ProductSeeder` e `AdminUserSeeder`. Ele não baixa arquivos da internet nem combina fontes de catálogo diferentes.
+
+`Database\Seeders\Development\RemoteCatalogSeeder` é uma ferramenta opt-in para experimentar um catálogo que baixa imagens externas. Não a execute em produção nem junto do seeder padrão, pois ele representa uma fonte de demonstração diferente.
+
+Em ambiente descartável, para recriar somente os dados de demonstração padrão, use:
 
 ```bash
 php artisan migrate:fresh --seed

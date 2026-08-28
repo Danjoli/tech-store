@@ -4,6 +4,8 @@
 
 A Tech Store usa Laravel 12 no back-end e Inertia + Vue 3 no front-end. A mesma aplicação entrega a vitrine em `resources/js/Pages/Store` e o painel em `resources/js/Pages/Admin`, sem duplicar API ou regras de autorização.
 
+`resources/js/app.ts` é o único ponto de entrada do cliente: importa o CSS e o bootstrap HTTP, resolve páginas sob demanda via Vite e monta o Vue com o plugin do Inertia. Páginas e layouts não devem iniciar aplicações Vue próprias.
+
 ## Rotas
 
 `routes/web.php` é somente o ponto de composição da loja. Os módulos ficam em `routes/store` por capacidade (`catalog`, `favorites`, `profile`, `cart`, `checkout` e `orders`). `routes/admin.php` aplica o middleware comum do painel e carrega `routes/admin/catalog.php`, `orders.php` e `shipments.php`.

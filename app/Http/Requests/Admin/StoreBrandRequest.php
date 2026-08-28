@@ -38,6 +38,7 @@ class StoreBrandRequest extends FormRequest
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
+                'dimensions:max_width=3000,max_height=3000',
                 'max:2048',
             ],
             'is_active' => [
@@ -58,6 +59,7 @@ class StoreBrandRequest extends FormRequest
             'website_url.url' => 'Informe uma URL válida.',
             'logo.image' => 'O logo deve ser uma imagem.',
             'logo.mimes' => 'O logo deve ser JPG, PNG ou WebP.',
+            'logo.dimensions' => 'O logo deve possuir no máximo 3000 por 3000 pixels.',
             'logo.max' => 'O logo deve possuir no máximo 2 MB.',
         ];
     }

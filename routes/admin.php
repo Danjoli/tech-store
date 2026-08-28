@@ -3,7 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified', 'admin'])
+Route::middleware(['auth', 'active', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function (): void {

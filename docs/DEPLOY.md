@@ -13,7 +13,17 @@ php artisan optimize
 
 Configure `APP_ENV=production`, `APP_DEBUG=false`, credenciais de banco e um `APP_KEY` exclusivo no `.env` do servidor. Nunca versione o `.env`.
 
-Também configure `SESSION_SECURE_COOKIE=true`, `SESSION_HTTP_ONLY=true` e `SESSION_SAME_SITE=lax`. Após editar o ambiente, execute `php artisan optimize:clear` e `php artisan config:cache`.
+Também configure `SESSION_SECURE_COOKIE=true`, `SESSION_HTTP_ONLY=true`, `SESSION_ENCRYPT=true` e `SESSION_SAME_SITE=lax`. O domínio deve servir exclusivamente por HTTPS: a aplicação emite HSTS em respostas seguras e o redirecionamento HTTP → HTTPS precisa continuar ativo na Hostinger. Após editar o ambiente, execute `php artisan optimize:clear` e `php artisan config:cache`.
+
+Para produção, use também logs rotativos e pouco verbosos:
+
+```dotenv
+LOG_CHANNEL=stack
+LOG_STACK=daily
+LOG_LEVEL=warning
+```
+
+O `.env` real, `APP_KEY`, senhas de banco, SMTP, tokens de gateway e segredos de webhook não podem ir para o Git ou aparecer em logs. Mantenha backups do banco e das imagens fora do diretório público e limite o acesso SSH/painel aos administradores necessários.
 
 ## Arquivos enviados
 

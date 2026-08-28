@@ -41,7 +41,13 @@ O projeto já suporta fila pelo Laravel. No estado atual, o catálogo não possu
 
 As rotas administrativas exigem autenticação, e-mail verificado e o middleware `admin`. A role é um enum (`admin` ou `customer`). Produtos públicos usam o escopo `active`, que exige status ativo e data de publicação.
 
-Pedidos e itens do carrinho usam Policies para garantir que somente o dono consiga consultá-los ou alterá-los. Ações comerciais exigem e-mail verificado e possuem rate limiting. `SecurityHeadersMiddleware` adiciona CSP, proteção contra MIME sniffing, clickjacking, referer excessivo e permissões de navegador desnecessárias.
+Pedidos e itens do carrinho usam Policies para garantir que somente o dono consiga consultá-los ou alterá-los. Ações comerciais exigem e-mail verificado e possuem rate limiting. Contas inativas são impedidas tanto no login quanto em sessões existentes. Cadastros e redefinições de senha exigem ao menos 12 caracteres, maiúscula, minúscula, número, símbolo e verificação contra senhas expostas.
+
+`SecurityHeadersMiddleware` adiciona CSP sem scripts inline, proteção contra MIME sniffing, clickjacking, referer excessivo, permissões de navegador desnecessárias e isolamento cross-origin. Em conexões HTTPS, também emite HSTS para manter acessos futuros no canal seguro. Uploads administrativos aceitam apenas JPG, PNG e WebP, com limite de tamanho e resolução.
+
+### Limites da aplicação
+
+O código reduz riscos conhecidos, mas não substitui controles de infraestrutura. A publicação segura exige HTTPS com redirecionamento ativo, `APP_DEBUG=false`, cookies seguros, um banco com credenciais exclusivas, atualizações de dependências, backups testados, permissões restritas em `storage` e monitoramento de falhas. Gateway e frete reais continuam sujeitos à homologação e à validação de webhooks autenticados antes de atender clientes.
 
 ## Pagamentos, frete e estoque
 

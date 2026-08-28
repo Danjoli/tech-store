@@ -13,6 +13,6 @@ Este diretório complementa o [README da raiz](../README.md). O README serve par
 - Documente alterações em fluxos de pagamento, estoque, entrega, autenticação ou segurança na arquitetura e na implantação.
 - Atualize o catálogo quando formulários, produtos, variações, imagens ou regras de compra mudarem.
 - Mantenha a estrutura de rotas por domínio; novos arquivos em `routes/store` ou `routes/admin` só devem surgir quando houver uma capacidade independente.
-- Mantenha testes de Feature nas áreas `Admin`, `Store`, `Database` ou `Http`; `tests/Unit` contém somente regras sem banco ou HTTP, como cálculos de modelos e contratos de gateway.
+- Mantenha testes de Feature nas áreas `Admin`, `Store`, `Database` ou `Http`; `tests/Unit` contém somente regras sem banco ou HTTP, como cálculos de modelos e contratos sandbox de gateway e frete.
 - Não registre senhas, chaves, tokens, dados de clientes ou o conteúdo de um `.env` real.
 - Antes de registrar uma mudança, valide com `vendor/bin/pint --test`, `php artisan test`, `npm run typecheck` e `npm run build`.

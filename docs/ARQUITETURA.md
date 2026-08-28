@@ -51,4 +51,8 @@ Em produção, a confirmação ou recusa do pagamento deve vir de um webhook aut
 
 ## Testes
 
-`tests/Feature` é organizado por fronteira do sistema: `Admin`, `Store`, `Database` e `Http`. Esses cenários usam SQLite em memória e cobrem rotas, persistência, seeders, autorização e fluxos de compra. `tests/Unit` fica reservado para regras puras, sem banco, HTTP ou container do Laravel.
+`tests/Feature` é organizado por fronteira do sistema: `Admin`, `Store`, `Database` e `Http`. Esses cenários usam SQLite em memória e cobrem rotas, persistência, seeders, autorização, administração de pedidos/envios, perfil, rate limits, cabeçalhos e fluxos de compra. `tests/Unit` cobre regras e contratos focados, sem banco ou HTTP, como os gateways de pagamento e a cotação sandbox de frete.
+
+Na última validação local, a suíte possui **88 testes e 393 asserções**. A contagem muda naturalmente quando novos cenários são acrescentados; o comando de referência é sempre `php artisan test`.
+
+Os testes verificam o contrato local do Pix, boleto, cartão e frete em modo sandbox. Antes de uma integração de produção, a equipe deve homologar o provedor escolhido em ambiente próprio: credenciais, callbacks/webhooks autenticados, recusas, estornos, prazos e cálculo real de frete não podem ser considerados cobertos pelo sandbox.

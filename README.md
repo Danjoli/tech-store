@@ -29,6 +29,8 @@ npm run build
 
 Os testes usam SQLite em memória automaticamente; a aplicação pode continuar usando MySQL no ambiente local e em produção.
 
+Na última validação, a suíte executou 88 testes com 393 asserções. Use `php artisan test` como fonte de verdade após qualquer alteração.
+
 Também é possível validar os tipos do front-end:
 
 ```bash

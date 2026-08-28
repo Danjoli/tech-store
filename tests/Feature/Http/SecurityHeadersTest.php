@@ -17,5 +17,10 @@ class SecurityHeadersTest extends TestCase
             ->assertHeader('X-Frame-Options', 'SAMEORIGIN')
             ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
             ->assertHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+        $this->assertStringContainsString(
+            "object-src 'none'",
+            (string) $this->get('/')->headers->get('Content-Security-Policy'),
+        );
     }
 }

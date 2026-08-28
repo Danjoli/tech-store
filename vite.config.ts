@@ -9,7 +9,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
-                'resources/js/app.ts'
+                'resources/js/app.ts',
             ],
             refresh: true,
         }),
@@ -23,7 +23,7 @@ export default defineConfig({
             '@': '/resources/js',
         },
     },
-    
+
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],

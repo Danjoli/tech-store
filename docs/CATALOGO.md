@@ -38,6 +38,12 @@ O saldo disponível é `stock - reserved_stock`. O dashboard lista variações a
 
 `Database\Seeders\Development\RemoteCatalogSeeder` é uma ferramenta opt-in para experimentar um catálogo que baixa imagens externas. Não a execute em produção nem junto do seeder padrão, pois ele representa uma fonte de demonstração diferente.
 
+Para executá-lo exclusivamente em um ambiente descartável já migrado:
+
+```bash
+php artisan db:seed --class="Database\Seeders\Development\RemoteCatalogSeeder"
+```
+
 Em ambiente descartável, para recriar somente os dados de demonstração padrão, use:
 
 ```bash

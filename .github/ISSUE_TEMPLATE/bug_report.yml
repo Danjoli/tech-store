@@ -1,0 +1,44 @@
+name: Relatar um problema
+description: Informe um comportamento incorreto ou inesperado.
+title: "fix: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Obrigado por ajudar a melhorar a Tech Store. Não inclua credenciais ou dados reais de clientes.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema
+      description: Descreva o que aconteceu e o que deveria acontecer.
+      placeholder: Ao tentar..., o sistema... O esperado era...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Como reproduzir
+      description: Liste os passos mínimos para reproduzir o problema.
+      placeholder: |
+        1. Acesse...
+        2. Preencha...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Informe navegador, sistema operacional e ambiente usado.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidências adicionais
+      description: Inclua logs sanitizados ou capturas de tela, se forem úteis.
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Segurança
+      options:
+        - label: Confirmei que não incluí senhas, tokens, chaves ou dados pessoais.
+          required: true

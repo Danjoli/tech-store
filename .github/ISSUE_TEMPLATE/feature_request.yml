@@ -1,0 +1,36 @@
+name: Sugerir uma funcionalidade
+description: Proponha uma melhoria com valor claro para clientes ou operação.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto
+      description: Que necessidade ou oportunidade motivou esta proposta?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+      description: Descreva o comportamento desejado sem prender a solução à implementação.
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: Valor esperado
+      description: Quem se beneficia e como o resultado será percebido?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceitação
+      placeholder: |
+        - [ ] Cenário principal funciona
+        - [ ] Erros esperados são tratados
+        - [ ] Testes relevantes foram adicionados
+    validations:
+      required: true

@@ -1,0 +1,28 @@
+name: Tarefa técnica
+description: Registre manutenção, refatoração, testes ou trabalho de infraestrutura.
+title: "chore: "
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivação
+      description: Explique o problema técnico, risco ou dívida que será tratado.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Escopo
+      description: Liste o que faz e o que não faz parte desta tarefa.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceitação
+      placeholder: |
+        - [ ] Alteração implementada
+        - [ ] Testes e documentação atualizados
+        - [ ] CI aprovado
+    validations:
+      required: true

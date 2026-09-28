@@ -11,5 +11,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutVite();
+        config()->set('inertia.pages.paths', [resource_path('js/Pages')]);
     }
 }
